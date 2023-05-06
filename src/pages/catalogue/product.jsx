@@ -16,12 +16,12 @@ export default function Home() {
     useEffect(() => {
         if (loading) return;
         if (!user) router.push('/log-in');
-    }, [user, loading, router]);
+    }, [user, loading]);
     return (
         <main
             className={`mx-auto max-w-sm h-screen flex ${jaldi.className} box-border bg-white`}>
             <div className="mx-4 my-16 flex w-full flex-col flex-nowrap content-between text-black">
-                <Link href="/catalogue" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
+                <Link href="/catalouge" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
                         <Image src="/logo.png" width={100} height={100} alt="katalog"></Image>
                     </div>
