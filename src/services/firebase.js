@@ -7,7 +7,7 @@ import {
     signInWithPopup,
     signOut
 } from "firebase/auth";
-import {addDoc, collection, getDocs, getFirestore, query, where, doc, getDoc} from "firebase/firestore";
+import {addDoc, collection, getDocs, getFirestore, query, where, doc, getDoc, updateDoc} from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -51,38 +51,82 @@ const signInWithGoogle = async () => {
     }
 }
 const logInWithEmailAndPassword = async (email, password) => {
-     return await signInWithEmailAndPassword(auth, email, password);
+    return await signInWithEmailAndPassword(auth, email, password);
 
 };
 const registerWithEmailAndPassword = async (email, firstName, lastName, password, phone) => {
-        const res = await createUserWithEmailAndPassword(auth, email, password);
-        const user = res.user;
-        return await addDoc(collection(db, "users"), {
-            uid: user.uid,
-            name: firstName+ " " +lastName,
-            authProvider: "local",
-            email: email,
-            phone: phone
-        });
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    return await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        name: firstName + " " + lastName,
+        authProvider: "local",
+        email: email,
+        phone: phone
+    });
 
 };
 
 const getBoardGamesCollection = async (searchQuery) => {
     const q = query(collection(db, "items", 'board_games', 'owned_board_games'), where("name", ">=", searchQuery), where("name", "<=", searchQuery + "\uf8ff"));
-    return await getDocs(q).then((querySnapshot)=>{
+    return await getDocs(q).then((querySnapshot) => {
         return querySnapshot.docs
             .map((doc) => ({...doc.data(), id: doc.id}));
     })
-    
+};
+const getReservationsCollection = async (uid) => {
+    const q = query(collection(db, "reservations"), where("user", "==", uid));
+    return await getDocs(q).then((querySnapshot) => {
+        console.log(querySnapshot.docs
+            .map((doc) => ({...doc.data(), id: doc.id})))
+        return querySnapshot.docs
+            .map((doc) => ({...doc.data(), id: doc.id}));
+    })
+
 };
 const getBoardGameById = async (searchQuery) => {
-    
+
     const q = doc(db, "items", 'board_games', 'owned_board_games', searchQuery);
-    return await getDoc(q).then((doc)=>{
+    return await getDoc(q).then((doc) => {
         return doc.data()
     })
-    
+
 };
+const getReservationById = async (searchQuery) => {
+
+    const q = doc(db, "reservations", searchQuery);
+    return await getDoc(q).then((doc) => {
+        return doc.data()
+    })
+
+};
+const getLocationById = async (searchQuery) => {
+    const q = doc(db, "locations", searchQuery);
+    return await getDoc(q).then((doc) => {
+        return doc.data()
+    })
+
+};
+
+const addReservation = async (user, game, game_id) => {
+    console.log(user.uid, game, game_id)
+    return await addDoc(collection(db, "reservations"), {
+        user: user.uid,
+        game: game_id,
+        location: game.location,
+        name: game.name,
+        reservation_date: Date.now(),
+        status: 'Reserved'
+    });
+};
+
+const updateGameStatus = async (id, game) => {
+    const q = doc(db, "items", 'board_games', 'owned_board_games', id);
+    await updateDoc(q, {
+        rented: game.rented + 1,
+    })
+
+}
 
 
 const logout = () => {
@@ -96,5 +140,10 @@ export {
     logout,
     getBoardGamesCollection,
     getBoardGameById,
+    getReservationsCollection,
+    getReservationById,
+    getLocationById,
+    addReservation,
+    updateGameStatus,
     db
 };
