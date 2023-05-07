@@ -1,20 +1,13 @@
-import {initializeApp, getApp, getApps} from 'firebase/app';
+import {getApp, getApps, initializeApp} from 'firebase/app';
 import {
-    GoogleAuthProvider,
-    getAuth,
-    signInWithPopup,
-    signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
+    getAuth,
+    GoogleAuthProvider,
+    signInWithEmailAndPassword,
+    signInWithPopup,
     signOut
 } from "firebase/auth";
-import {
-    getFirestore,
-    query,
-    getDocs,
-    collection,
-    where,
-    addDoc,
-} from "firebase/firestore";
+import {addDoc, collection, getDocs, getFirestore, query, where, doc, getDoc} from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -74,6 +67,24 @@ const registerWithEmailAndPassword = async (email, firstName, lastName, password
 
 };
 
+const getBoardGamesCollection = async (searchQuery) => {
+    const q = query(collection(db, "items", 'board_games', 'owned_board_games'), where("name", ">=", searchQuery), where("name", "<=", searchQuery + "\uf8ff"));
+    return await getDocs(q).then((querySnapshot)=>{
+        return querySnapshot.docs
+            .map((doc) => ({...doc.data(), id: doc.id}));
+    })
+    
+};
+const getBoardGameById = async (searchQuery) => {
+    
+    const q = doc(db, "items", 'board_games', 'owned_board_games', searchQuery);
+    return await getDoc(q).then((doc)=>{
+        return doc.data()
+    })
+    
+};
+
+
 const logout = () => {
     signOut(auth);
 };
@@ -83,5 +94,7 @@ export {
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,
     logout,
+    getBoardGamesCollection,
+    getBoardGameById,
     db
 };
