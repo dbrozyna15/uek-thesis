@@ -23,22 +23,22 @@ export default function Home() {
             <div className="mx-4 my-16 flex w-full flex-col flex-nowrap content-between text-black">
                 <Link href="/catalogue" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
-                        <Image src="/logo.png" width={100} height={100} alt="katalog"></Image>
+                        <Image src="/icons/catalogue.png" width={100} height={100} alt="katalog"></Image>
                     </div>
                     <div className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Calatouge
                     </div>
                 </Link>
                 <Link href="/reservations" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
-                        <Image src="/logo.png" width={100} height={100} alt="rezerwacje"></Image>
+                        <Image src="/icons/catalogue.png" width={100} height={100} alt="rezerwacje"></Image>
                     </div>
                     <div
                         className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Reservations
                     </div>
                 </Link>
-                <Link href="/pick-up" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
+                <Link href="/locations" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
-                        <Image src="/logo.png" width={100} height={100} alt="pickup"></Image>
+                        <Image src="/icons/locations.png" width={100} height={100} alt="pickup"></Image>
                     </div>
                     <div className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Pick-up
                         points
@@ -46,7 +46,7 @@ export default function Home() {
                 </Link>
                 <Link href="/profile" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
-                        <Image src="/logo.png" width={100} height={100} alt="profile"></Image>
+                        <Image src="/icons/profile.png" width={100} height={100} alt="profile"></Image>
                     </div>
                     <div className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Profile
                     </div>
