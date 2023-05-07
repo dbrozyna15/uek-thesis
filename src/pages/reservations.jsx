@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import {useEffect, useState} from 'react'
 import {useAuthState} from 'react-firebase-hooks/auth'
-import {auth} from "@/services/firebase";
+import {auth, getReservationsCollection} from "@/services/firebase";
 import {useRouter} from "next/navigation"
-import {getBoardGamesCollection} from "@/services/firebase";
 import NavigationBar from "@/components/navigation-bar";
 
 import {Jaldi} from 'next/font/google'
@@ -15,15 +14,19 @@ export default function Reservations() {
     const [searchQuery, setSearchQuery] = useState("");
     const [user] = useAuthState(auth);
     const [reservations, setReservations] = useState([]);
-    const fetchGames = async (searchQuery) => {
-        await getBoardGamesCollection(searchQuery).then(result => {
+    const fetchReservations = async () => {
+        await getReservationsCollection(user?.uid).then(result => {
             setReservations(result)
-            console.log(reservations)
         });
     }
+    const getTimeString = (date) => {
+        date = date?.seconds ? date?.seconds * 1000 : date
+        const dateObject = new Date(date); // assuming seconds is Unix timestamp
+        return dateObject.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    };
     useEffect(() => {
         document.querySelector('html').style.overflowY = 'scroll'
-        fetchGames(searchQuery);
+        fetchReservations();
         if (!user) router.push('/log-in');
     }, [user, searchQuery]);
     return (
@@ -31,12 +34,8 @@ export default function Reservations() {
             className={`mx-auto max-w-sm flex ${jaldi.className} box-border min-h-screen overflow-auto flex-nowrap justify-center`}>
             <div
                 className="mx-4 mt-8 mb-16 flex w-full flex-col flex-nowrap content-between text-black">
-                <div className="mb-8">
-                    <input
-                        className="w-full appearance-none rounded-2xl border border-black px-3 text-xl leading-tight text-black shadow py-1.5 focus:shadow-outline focus:outline-none"
-                        id="searchQuery" type="text" value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search..."/>
+                <div className="my-4 text-center text-3xl">
+                    Reservations
                 </div>
                 <div className="mb-16 flex flex-wrap">
                     {reservations.map((reservation) => (
@@ -56,7 +55,7 @@ export default function Reservations() {
                                     </div>
                                     <div>
                                         <div className="text-base leading-5 text-neutral-600">Date of reservation</div>
-                                        <div>{reservation.reservation_date ? reservation.reservation_date : 'Date not found'}</div>
+                                        <div>{getTimeString(reservation.reservation_date) ?? 'Date not found'}</div>
                                     </div>
                                 </div>
                         </Link>
@@ -67,3 +66,4 @@ export default function Reservations() {
         </main>
     )
 }
+

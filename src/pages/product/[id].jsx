@@ -1,19 +1,27 @@
 import {useRouter} from 'next/router';
-import {getBoardGameById} from "@/services/firebase";
+import {getBoardGameById, addReservation, updateGameStatus, auth} from "@/services/firebase";
 import Image from "next/image";
 import {Jaldi} from 'next/font/google'
 import BackButton from "@/components/back-button";
 import TagsArray from "@/components/tags-array";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
 function ProductPage({game}) {
     const router = useRouter();
+    const {id} = router.query;
+    const [user, loading] = useAuthState(auth);
     if (!game) {
         return <div>Loading...</div>;
     }
     const available = (parseInt(game.quantity) > parseInt(game.rented))
-
+    const makeReservation = async () => {
+        if (!available) return;
+        const reservation = await addReservation(user, game, id);
+        await updateGameStatus(id, game);
+        router.push(`/reservations/${reservation.id}`)
+    }
     return (
         <main
             className={`mx-auto max-w-sm flex ${jaldi.className} box-border h-screen flex-nowrap justify-center overflow-hidden`}>
@@ -34,7 +42,7 @@ function ProductPage({game}) {
                 </div>
                 { available ?
                     <div className="flex justify-center">
-                        <button className="h-12 w-11/12 rounded-2xl bg-black text-2xl text-white">RESERVE</button>
+                        <button className="h-12 w-11/12 rounded-2xl bg-black text-2xl text-white" onClick={makeReservation}>RESERVE</button>
                     </div>
                     :
                     <div className="flex justify-center">

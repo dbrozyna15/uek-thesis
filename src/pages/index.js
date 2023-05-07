@@ -25,7 +25,7 @@ export default function Home() {
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
                         <Image src="/icons/catalogue.png" width={100} height={100} alt="katalog"></Image>
                     </div>
-                    <div className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Calatouge
+                    <div className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Catalogue
                     </div>
                 </Link>
                 <Link href="/reservations" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
