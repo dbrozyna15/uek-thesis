@@ -5,7 +5,7 @@ import {useAuthState} from 'react-firebase-hooks/auth'
 import {auth} from "@/services/firebase";
 import {useRouter} from "next/navigation"
 import {getBoardGamesCollection} from "@/services/firebase";
-
+import NavigationBar from "@/components/navigation-bar";
 
 import {Jaldi} from 'next/font/google'
 
@@ -23,12 +23,13 @@ export default function Catalogue() {
         });
     }
     useEffect(() => {
+        document.querySelector('html').style.overflowY = 'scroll'
         fetchGames(searchQuery);
         if (!user) router.push('/log-in');
     }, [user, searchQuery]);
     return (
         <main
-            className={`mx-auto max-w-sm flex ${jaldi.className} box-border min-h-screen`}>
+            className={`mx-auto max-w-sm flex ${jaldi.className} box-border min-h-screen overflow-auto flex-nowrap justify-center`}>
             <div
                 className="mx-4 mt-8 mb-16 flex w-full flex-col flex-nowrap content-between text-black">
                 <div className="mb-8">
@@ -38,10 +39,10 @@ export default function Catalogue() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search..."/>
                 </div>
-                <div className="flex flex-wrap">
+                <div className="mb-16 flex flex-wrap">
                     {games.map((game) => (
-                        <Link key={game.id} href={`/catalogue/product/${game.id}`}>
-                            <div className="mx-1 my-4 flex h-80 w-full flex-col border border-black px-2">
+                        <Link key={game.id} href={`/product/${game.id}`}>
+                            <div className="my-3 flex h-80 w-full flex-col bg-neutral-100 px-2 shadow">
                                 <div className="flex h-3/4 rounded border mx-2.5 my-2.5">
                                     <Image src={`/games/${game.name}.jpg`} alt={game.name} width={300} height={100}/>
                                 </div>
@@ -53,8 +54,8 @@ export default function Catalogue() {
                         </Link>
                     ))}
                 </div>
-
             </div>
+            <NavigationBar/>
         </main>
     )
 }
