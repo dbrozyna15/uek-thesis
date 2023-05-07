@@ -7,7 +7,7 @@ import {
     signInWithPopup,
     signOut
 } from "firebase/auth";
-import {addDoc, collection, getDocs, getFirestore, query, where,} from "firebase/firestore";
+import {addDoc, collection, getDocs, getFirestore, query, where, doc, getDoc} from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -75,6 +75,14 @@ const getBoardGamesCollection = async (searchQuery) => {
     })
     
 };
+const getBoardGameById = async (searchQuery) => {
+    
+    const q = doc(db, "items", 'board_games', 'owned_board_games', searchQuery);
+    return await getDoc(q).then((doc)=>{
+        return doc.data()
+    })
+    
+};
 
 
 const logout = () => {
@@ -87,5 +95,6 @@ export {
     registerWithEmailAndPassword,
     logout,
     getBoardGamesCollection,
+    getBoardGameById,
     db
 };
