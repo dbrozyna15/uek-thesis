@@ -14,7 +14,7 @@ const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 export default function Catalogue() {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
-    const [user, loading] = useAuthState(auth);
+    const [user] = useAuthState(auth);
     const [games, setGames] = useState([]);
     const fetchGames = async (searchQuery) => {
         await getBoardGamesCollection(searchQuery).then(result => {

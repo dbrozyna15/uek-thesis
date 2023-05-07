@@ -9,7 +9,6 @@ const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
 function ProductPage({game}) {
     const router = useRouter();
-    const {id} = router.query;
     if (!game) {
         return <div>Loading...</div>;
     }

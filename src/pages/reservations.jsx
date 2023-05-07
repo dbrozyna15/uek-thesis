@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import {useEffect, useState} from 'react'
 import {useAuthState} from 'react-firebase-hooks/auth'
@@ -14,7 +13,7 @@ const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 export default function Reservations() {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
-    const [user, loading] = useAuthState(auth);
+    const [user] = useAuthState(auth);
     const [reservations, setReservations] = useState([]);
     const fetchGames = async (searchQuery) => {
         await getBoardGamesCollection(searchQuery).then(result => {

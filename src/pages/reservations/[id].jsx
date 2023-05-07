@@ -3,7 +3,6 @@ import {getBoardGameById} from "@/services/firebase";
 import Image from "next/image";
 import {Jaldi} from 'next/font/google'
 import BackButton from "@/components/back-button";
-import TagsArray from "@/components/tags-array";
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
