@@ -5,16 +5,15 @@ import {useRouter} from "next/navigation"
 import NavigationBar from "@/components/navigation-bar";
 
 import {Jaldi} from 'next/font/google'
+import LogoutButton from "@/components/logout-button";
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
 export default function Reservations() {
     const router = useRouter();
     const [user, loading] = useAuthState(auth);
-
     useEffect(() => {
         if (!user) router.push('/log-in');
-        console.log(user)
     }, [user, loading]);
     return (
         <main
@@ -26,12 +25,13 @@ export default function Reservations() {
                 </div>
                 <div className="mb-4 border-b border-black">
                     <div>Name</div>
-                    <div className="text-2xl">{user.displayName ?? 'John Doe'}</div>
+                    <div className="text-2xl">{user?.displayName ?? 'John Doe'}</div>
                 </div>
-                <div className="mb-4 border-b border-black">
+                <div className="mb-16 border-b border-black">
                     <div>E-mail</div>
-                    <div className="text-2xl">{user.email ?? 'johndoe@test.com'}</div>
+                    <div className="text-2xl">{user?.email ?? 'johndoe@test.com'}</div>
                 </div>
+                <LogoutButton/>
             </div>
             <NavigationBar/>
         </main>
