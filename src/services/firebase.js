@@ -54,7 +54,7 @@ const logInWithEmailAndPassword = async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password);
 
 };
-const registerWithEmailAndPassword = async (email, firstName, lastName, password, phone) => {
+const registerWithEmailAndPassword = async (email, firstName, lastName, password) => {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
     return await addDoc(collection(db, "users"), {
@@ -62,7 +62,6 @@ const registerWithEmailAndPassword = async (email, firstName, lastName, password
         name: firstName + " " + lastName,
         authProvider: "local",
         email: email,
-        phone: phone
     });
 
 };
@@ -77,8 +76,14 @@ const getBoardGamesCollection = async (searchQuery) => {
 const getReservationsCollection = async (uid) => {
     const q = query(collection(db, "reservations"), where("user", "==", uid));
     return await getDocs(q).then((querySnapshot) => {
-        console.log(querySnapshot.docs
-            .map((doc) => ({...doc.data(), id: doc.id})))
+        return querySnapshot.docs
+            .map((doc) => ({...doc.data(), id: doc.id}));
+    })
+
+};
+const getLocationsCollection = async (searchQuery) => {
+    const q = query(collection(db, "locations"), where("address", ">=", searchQuery), where("address", "<=", searchQuery + "\uf8ff"));
+    return await getDocs(q).then((querySnapshot) => {
         return querySnapshot.docs
             .map((doc) => ({...doc.data(), id: doc.id}));
     })
@@ -141,6 +146,7 @@ export {
     getBoardGamesCollection,
     getBoardGameById,
     getReservationsCollection,
+    getLocationsCollection,
     getReservationById,
     getLocationById,
     addReservation,
