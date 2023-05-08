@@ -19,14 +19,14 @@ export default function RegisterSuccess () {
                             Congratulations,<br/> your account has been successfully created.
                         </div>
                     </div>
-                    <Link href="/log-in">
+                    <Link href="/">
                     <button
                         className="bg-black hover:bg-white text-white
                             hover:text-black hover:border-black border text-3xl
                             font-bold py-2 px-4 rounded focus:outline-none
                             focus:shadow-outline w-full"
                         type="button">
-                            Sign In
+                            Proceed to Home Page
                     </button>
                     </Link>
                 </div>

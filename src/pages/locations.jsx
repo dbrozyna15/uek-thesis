@@ -1,8 +1,7 @@
 import {useEffect, useState} from 'react'
 import {useAuthState} from 'react-firebase-hooks/auth'
-import {auth} from "@/services/firebase";
+import {auth, getLocationsCollection} from "@/services/firebase";
 import {useRouter} from "next/navigation"
-import {getBoardGamesCollection} from "@/services/firebase";
 import NavigationBar from "@/components/navigation-bar";
 
 import {Jaldi} from 'next/font/google'
@@ -14,17 +13,25 @@ export default function Reservations() {
     const [searchQuery, setSearchQuery] = useState("");
     const [user, loading] = useAuthState(auth);
     const [locations, setLocations] = useState([]);
-    const fetchGames = async (searchQuery) => {
-        await getBoardGamesCollection(searchQuery).then(result => {
+    const [currentLocation, setCurrentLocation] = useState();
+
+    const fetchLocations = async (searchQuery) => {
+        await getLocationsCollection(searchQuery).then(result => {
             setLocations(result)
-            console.log(locations)
+        });
+    }
+    const getCurrentLocation =  () => {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            setCurrentLocation(position.coords) 
         });
     }
     useEffect(() => {
         document.querySelector('html').style.overflowY = 'scroll'
-        fetchGames(searchQuery);
+        fetchLocations(searchQuery);
+        if (!currentLocation) getCurrentLocation()
+        console.log(currentLocation)
         if (!user) router.push('/log-in');
-    }, [user, searchQuery]);
+    }, [user, searchQuery, currentLocation]);
     return (
         <main
             className={`mx-auto max-w-sm flex ${jaldi.className} box-border min-h-screen overflow-auto flex-nowrap justify-center`}>
@@ -46,11 +53,11 @@ export default function Reservations() {
                             <div className="h-1/5 w-full py-3 text-xl">
                                 <div className="">
                                     <div className="text-base leading-5 text-neutral-600">Street name</div>
-                                    <div>{location.id}</div>
+                                    <div>{location.address}</div>
                                 </div>
                                 <div>
                                     <div className="text-base leading-5 text-neutral-600">Distance</div>
-                                    <div>{location.name}</div>
+                                    <div>{getDistance(currentLocation, location.location)}</div>
                                 </div>
 
                             </div>
@@ -61,4 +68,21 @@ export default function Reservations() {
             <NavigationBar/>
         </main>
     )
+}
+
+function getDistance(currentLocation, destinedLocation) {
+    let R = 6371.0710;
+    
+    let rLat1 = currentLocation?.latitude * (Math.PI / 180);
+    let rLat2 = destinedLocation?.latitude * (Math.PI / 180);
+    
+    let radianDiffLat = rLat2 - rLat1;
+    let radianDiffLng = (destinedLocation?.longitude - currentLocation?.longitude) * (Math.PI / 180);
+
+    let distance = 2 * R * Math.asin(Math.sqrt(Math.sin(radianDiffLat / 2) * Math.sin(radianDiffLat / 2) + Math.cos(rLat1) * Math.cos(rLat2) * Math.sin(radianDiffLng / 2) * Math.sin(radianDiffLng / 2)));
+    if (isNaN(distance)){
+        return 'Could not assert localization';
+    }
+    return Math.round(distance*100)/100 + ' km'
+
 }

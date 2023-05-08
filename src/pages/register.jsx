@@ -11,11 +11,10 @@ export default function RegisterPage() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [password, setPassword] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
     const [showError, setShowError] = useState('hidden');
     const register = async () => {
         try {
-            await registerWithEmailAndPassword(email, firstName, lastName, password, phoneNumber).then(() => {router.push('/registration-success')})
+            await registerWithEmailAndPassword(email, firstName, lastName, password).then(() => {router.push('/registration-success')})
         } catch (err) {
             setShowError('visible');
         }
@@ -64,15 +63,6 @@ export default function RegisterPage() {
                             className="w-full appearance-none rounded border px-3 py-2 text-xl leading-tight text-black shadow focus:shadow-outline focus:outline-none"
                             id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}
                             placeholder="Doe"/>
-                    </div>
-                    <div className="mb-4">
-                        <label className="mb-2 block text-xl font-bold text-gray-700" htmlFor="phoneNumber">
-                            Phone number
-                        </label>
-                        <input
-                            className="w-full appearance-none rounded border px-3 py-2 text-xl leading-tight text-black shadow focus:shadow-outline focus:outline-none"
-                            id="phoneNumber" type="tel" value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)} placeholder="+48 100 200 300"/>
                     </div>
                     <div className="mb-6">
                         <label className="mb-2 block text-xl font-bold text-gray-700" htmlFor="password">
