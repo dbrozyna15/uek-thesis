@@ -1,31 +1,31 @@
 {
-    "name": "Final Project PSM PWA",
-    "short_name": "Final PSM",
+    "name": "Dice Master",
+    "short_name": "Dice Master for PSM",
     "theme_color": "#D9D9D9",
     "background_color": "#eeeeee",
-    "display": "browser",
-    "start_url": "/psm-final-project/",
-    "description": "This is a PWA PSM final project",
+    "display": "minimal-ui",
+    "start_url": "/",
+    "description": "PWA PSM final project",
     "orientation": "any",
     "display_override": ["window-controls-overlay"],
     "icons": [
       {
-        "src": "assets/icons/512x512.png",
+        "src": "/logo.png",
         "sizes": "512x512",
         "type": "image/png"
       },
       {
-        "src": "assets/icons/192x192.png",
+        "src": "/logo.png",
         "sizes": "192x192",
         "type": "image/png"
       },
       {
-        "src": "assets/icons/48x48.png",
+        "src": "/logo.png",
         "sizes": "48x48",
         "type": "image/png"
       },
       {
-        "src": "assets/icons/24x24.png",
+        "src": "/logo.png",
         "sizes": "24x24",
         "type": "image/png"
       }
