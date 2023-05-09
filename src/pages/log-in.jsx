@@ -37,12 +37,9 @@ export default function LoginPage() {
         <main
             className={`mx-auto max-w-sm h-screen content-center flex flex-nowrap ${jaldi.className} box-border overflow-hidden`}>
             <div className="flex min-h-full w-full flex-wrap content-between bg-white">
-                <div className="mt-11 flex h-2/5 w-full flex-col flex-wrap content-center text-black">
-                    <div className="mb-5 h-3/4 logo">
-                        <Image src="/logo.png" alt="Dice Master Logo" width={256} height={256}/>
-                    </div>
-                    <div className="text-5xl app-name">
-                        DICE MASTER
+                <div className="mt-8 mb-3 flex w-full flex-col flex-wrap content-center text-black">
+                    <div className="mx-auto h-full logo">
+                        <Image src="/logo-2.png" alt="Dice Master Logo" width={180} height={150}/>
                     </div>
                 </div>
                 <div className="w-full px-8 message-bar" style={{height: "6%", visibility: showError}}>
@@ -53,7 +50,7 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                <form className="h-3/5 w-full rounded bg-white px-8 pt-6 pb-8">
+                <form className="h-4/6 w-full rounded bg-white px-8 pt-2 pb-8">
                     <div className="mb-4">
                         <label className="mb-2 block text-xl font-bold text-gray-700" htmlFor="username">
                             E-mail
@@ -63,7 +60,7 @@ export default function LoginPage() {
                             id="userEmail" type="text" value={email} onChange={(e) => setEmail(e.target.value)}
                             placeholder="placeholder@email.com"/>
                     </div>
-                    <div className="mb-6">
+                    <div className="mb-2">
                         <label className="mb-2 block text-xl font-bold text-gray-700" htmlFor="password">
                             Password
                         </label>

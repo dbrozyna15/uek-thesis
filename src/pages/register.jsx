@@ -52,7 +52,7 @@ export default function RegisterPage() {
                         WARNING: Wrong e-mail or password.
                     </div>
                 </div>
-                <form className="h-4/5 w-full rounded bg-white px-8 pt-6 pb-8">
+                <form className="h-4/5 w-full rounded bg-white px-8 pb-8">
                     <div className="mb-4">
                         <label className="mb-2 block text-xl font-bold text-gray-700" htmlFor="username">
                             E-mail

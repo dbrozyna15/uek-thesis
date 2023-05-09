@@ -34,16 +34,16 @@ export default function Reservations() {
                 <div className="mb-4 text-center text-5xl">
                     Profile
                 </div>
-                <div className="flex justify-center">
+                <div className="flex max-h-40 justify-center">
                     <Image src={userDetails?.avatarUrl ?? '/icons/profile.png'} alt="avatar-placeholder" width={150} height={100} className="rounded-full"/>
                 </div>
                 <div className="mb-4 border-b border-black">
                     <div>Name</div>
-                    <div className="text-2xl">{userDetails?.name ?? 'John Doe'}</div>
+                    <div className="text-2xl">{userDetails?.name ?? 'unreachable value'}</div>
                 </div>
                 <div className="mb-16 border-b border-black">
                     <div>E-mail</div>
-                    <div className="text-2xl">{user?.email ?? 'johndoe@test.com'}</div>
+                    <div className="text-2xl">{user?.email ?? 'unreachable value'}</div>
                 </div>
                 <LogoutButton/>
             </div>

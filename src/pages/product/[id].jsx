@@ -32,12 +32,12 @@ function ProductPage() {
     const available = (parseInt(game.quantity) > parseInt(game.rented))
     return (
         <main
-            className={`mx-auto max-w-sm flex ${jaldi.className} box-border h-screen flex-nowrap justify-center overflow-hidden`}>
+            className={`mx-auto max-w-sm flex ${jaldi.className} box-border flex-nowrap justify-center`}>
             <div
                 className="mx-4 mt-8 mb-16 flex w-full flex-col flex-nowrap content-between text-black">
                 <BackButton src="/catalogue"/>
                 <div className="flex w-full justify-center rounded-sm bg-neutral-100 pt-2 pb-6 shadow-lg">
-                    <Image src={`/games/${game.name}.jpg`} width={320} height={100} alt="xdd"/>
+                    <Image src={`/games/${game.name.toLowerCase()}.jpg`} width={200} height={100} alt="xdd"/>
                 </div>
                 <div className="mt-2 flex w-full flex-wrap text-2xl">{game.name}</div>
                 <div>{game.publisher}</div>
@@ -49,11 +49,11 @@ function ProductPage() {
                     <div className="mb-2 border-b-2">Available: <span className="float-right"> {available ? 'YES' : 'NO'} </span></div>
                 </div>
                 { available ?
-                    <div className="flex justify-center">
+                    <div className="mb-16 flex justify-center">
                         <button className="h-12 w-11/12 rounded-2xl bg-black text-2xl text-white" onClick={makeReservation}>RESERVE</button>
                     </div>
                     :
-                    <div className="flex justify-center">
+                    <div className="mb-4 flex justify-center">
                         <button className="h-12 w-11/12 rounded-2xl bg-neutral-400 text-2xl text-white">NOT AVAILABLE</button>
                     </div>
                 }

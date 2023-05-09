@@ -19,8 +19,8 @@ export default function Home() {
     }, [user, loading, router]);
     return (
         <main
-            className={`mx-auto max-w-sm h-screen flex ${jaldi.className} box-border bg-white`}>
-            <div className="mx-4 my-16 flex w-full flex-col flex-nowrap content-between text-black">
+            className={`mx-auto max-w-sm min-h-screen flex ${jaldi.className} box-border bg-white`}>
+            <div className="mx-4 my-8 flex w-full flex-col flex-nowrap content-between text-black">
                 <Link href="/catalogue" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
                         <Image src="/icons/catalogue.png" width={100} height={100} alt="katalog"></Image>
@@ -30,7 +30,7 @@ export default function Home() {
                 </Link>
                 <Link href="/reservations" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
-                        <Image src="/icons/catalogue.png" width={100} height={100} alt="rezerwacje"></Image>
+                        <Image src="/icons/calendar.png" width={100} height={100} alt="rezerwacje"></Image>
                     </div>
                     <div
                         className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Reservations

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['firebasestorage.googleapis.com', 'lh3.googleusercontent.com'],
+    domains: ['firebasestorage.googleapis.com', 'lh3.googleusercontent.com', 'psm-final-project-git-feature-spa-dbrozyna15.vercel.app'],
   },
 }
 

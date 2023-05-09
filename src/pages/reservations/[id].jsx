@@ -33,7 +33,7 @@ function ReservationPage() {
     }
     return (
         <main
-            className={`mx-auto max-w-sm flex ${jaldi.className} box-border h-screen flex-nowrap justify-center overflow-hidden max-h-screen`}>
+            className={`mx-auto max-w-sm flex ${jaldi.className} box-border flex-nowrap justify-center`}>
             <div
                 className="mx-4 mt-8 mb-16 flex w-full flex-col flex-nowrap content-between text-black">
                 <BackButton src="/reservations"/>
@@ -42,7 +42,7 @@ function ReservationPage() {
                     <div className="text-2xl">{id}</div>
                 </div>
                 <div className="flex w-full justify-center rounded-sm bg-neutral-100 pt-2 pb-6 shadow-lg">
-                    <Image src={`/games/${reservation.name}.jpg`} width={280} height={100} alt="xdd"/>
+                    <Image src={`/games/${reservation.name.toLowerCase()}.jpg`} width={200} height={100} alt="xdd"/>
                 </div>
                 <div className="mt-2 flex w-full flex-wrap text-3xl">
                     {reservation.name}
