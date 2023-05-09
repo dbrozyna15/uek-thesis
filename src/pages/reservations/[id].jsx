@@ -3,15 +3,17 @@ import {getLocationById, getReservationById} from "@/services/firebase";
 import Image from "next/image";
 import {Jaldi} from 'next/font/google'
 import BackButton from "@/components/back-button";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
 function ReservationPage() {
     const router = useRouter();
-    const {id} = router.query;
+    const {id, fresh} = router.query;
     const [reservation, setReservation] = useState();
     const [location, setLocation] = useState();
+    const [alerted, setAlerted] = useState(false);
+    const audioRef = useRef(null);
     useEffect(() => {
         if (id) {
             getReservationById(id).then((reservation) => {
@@ -21,13 +23,25 @@ function ReservationPage() {
                 reservation.reservation_date = getTimeString(reservation.reservation_date)
             })
         }
+        
+        if (fresh && ! alerted && audioRef) {
+            console.log('entered loop')
+            setAlerted(true)
+            setTimeout(() =>{
+                if ('vibrate' in navigator) {
+                    navigator.vibrate([100, 30, 300])
+                }
+                audioRef.current.play();
+                console.log('played')
+            }, 1000);
+        }
         if (reservation) {
             getLocationById(reservation.location).then((location) => {
                 setLocation(location)
                 location.location = JSON.stringify(location?.location)
             })
         }
-    }, [id, reservation]);
+    }, [alerted, fresh, id, reservation]);
     if (!reservation || !location) {
         return <div>Loading...</div>;
     }
@@ -37,6 +51,9 @@ function ReservationPage() {
             <div
                 className="mx-4 mt-8 mb-16 flex w-full flex-col flex-nowrap content-between text-black">
                 <BackButton src="/reservations"/>
+                <audio ref={audioRef}>
+                    <source src="https://firebasestorage.googleapis.com/v0/b/proj-sys-mob.appspot.com/o/sounds%2Falert-sound.mp3?alt=media&token=9521ab64-cdf6-43e7-b62f-f70ff5f72d9f" type="audio/mpeg" />
+                </audio>
                 <div className="mb-4">
                     <div className="text-lg text-neutral-600">Reservation number</div>
                     <div className="text-2xl">{id}</div>
@@ -66,22 +83,6 @@ function ReservationPage() {
         </main>
     );
 }
-
-// export async function getServerSideProps(context) {
-//     const {id} = context.params;
-//     const reservation = await getReservationById(id);
-//     reservation.return_deadline = getTimeString(reservation.return_deadline)
-//     reservation.pickup_date = getTimeString(reservation.pickup_date)
-//     reservation.reservation_date = getTimeString(reservation.reservation_date)
-//     const location = await getLocationById(reservation.location)
-//     location.location = JSON.stringify(location?.location)
-//     return {
-//         props: {
-//             reservation,
-//             location
-//         }
-//     };
-// }
 
 function getTimeString(date) {
     date = date?.seconds ? date?.seconds * 1000 : date

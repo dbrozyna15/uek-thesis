@@ -24,7 +24,7 @@ function ProductPage() {
         if (!available) return;
         const reservation = await addReservation(user, game, id);
         await updateGameStatus(id, game);
-        router.push(`/reservations/${reservation.id}`)
+        router.push(`/reservations/${reservation.id}?fresh=true`)
     }
     if (!game) {
         return <div>Loading...</div>;
