@@ -5,7 +5,7 @@
     "background_color": "#eeeeee",
     "display": "minimal-ui",
     "start_url": "/",
-    "description": "This is a PWA PSM final project",
+    "description": "PWA PSM final project",
     "orientation": "any",
     "display_override": ["window-controls-overlay"],
     "icons": [
