@@ -43,6 +43,7 @@ const signInWithGoogle = async () => {
                 name: user.displayName,
                 authProvider: "google",
                 email: user.email,
+                avatarUrl: user.photoURL
             });
         }
     } catch (err) {
@@ -54,7 +55,7 @@ const logInWithEmailAndPassword = async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password);
 
 };
-const registerWithEmailAndPassword = async (email, firstName, lastName, password) => {
+const registerWithEmailAndPassword = async (email, firstName, lastName, password, avatarUrl) => {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
     return await addDoc(collection(db, "users"), {
@@ -62,6 +63,7 @@ const registerWithEmailAndPassword = async (email, firstName, lastName, password
         name: firstName + " " + lastName,
         authProvider: "local",
         email: email,
+        avatarUrl: avatarUrl
     });
 
 };
@@ -112,6 +114,14 @@ const getLocationById = async (searchQuery) => {
     })
 
 };
+const getUserById = async (uid) => {
+    const q = query(collection(db, "users"), where("uid", "==", uid));
+    return await getDocs(q).then((querySnapshot) => {
+        return querySnapshot.docs
+            .map((doc) => ({...doc.data(), id: doc.id}))[0];
+    })
+
+};
 
 const addReservation = async (user, game, game_id) => {
     console.log(user.uid, game, game_id)
@@ -149,6 +159,7 @@ export {
     getLocationsCollection,
     getReservationById,
     getLocationById,
+    getUserById,
     addReservation,
     updateGameStatus,
     db
