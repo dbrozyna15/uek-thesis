@@ -101,7 +101,7 @@ export default function LoginPage() {
                             font-bold py-2 px-4 rounded focus:outline-none
                             focus:shadow-outline w-full"
                             type="button">
-                            Don't have account? Sign up
+                            Are you new? Sign up
                         </button>
                         </Link>
                     </div>
