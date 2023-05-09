@@ -3,13 +3,32 @@ import {getLocationById, getReservationById} from "@/services/firebase";
 import Image from "next/image";
 import {Jaldi} from 'next/font/google'
 import BackButton from "@/components/back-button";
+import {useEffect, useState} from "react";
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
-function ReservationPage({reservation, location = {}}) {
+function ReservationPage() {
     const router = useRouter();
     const {id} = router.query;
-    if (!reservation || !location ) {
+    const [reservation, setReservation] = useState();
+    const [location, setLocation] = useState();
+    useEffect(() => {
+        if (id) {
+            getReservationById(id).then((reservation) => {
+                setReservation(reservation)
+                reservation.return_deadline = getTimeString(reservation.return_deadline)
+                reservation.pickup_date = getTimeString(reservation.pickup_date)
+                reservation.reservation_date = getTimeString(reservation.reservation_date)
+            })
+        }
+        if (reservation) {
+            getLocationById(reservation.location).then((location) => {
+                setLocation(location)
+                location.location = JSON.stringify(location?.location)
+            })
+        }
+    }, [id, reservation]);
+    if (!reservation || !location) {
         return <div>Loading...</div>;
     }
     return (
@@ -48,26 +67,26 @@ function ReservationPage({reservation, location = {}}) {
     );
 }
 
-export async function getServerSideProps(context) {
-    const {id} = context.params;
-    const reservation = await getReservationById(id);
-    reservation.return_deadline = getTimeString(reservation.return_deadline)
-    reservation.pickup_date = getTimeString(reservation.pickup_date)
-    reservation.reservation_date = getTimeString(reservation.reservation_date)
-    const location = await getLocationById(reservation.location)
-    location.location = JSON.stringify(location?.location)
-    return {
-        props: {
-            reservation,
-            location
-        }
-    };
-}
+// export async function getServerSideProps(context) {
+//     const {id} = context.params;
+//     const reservation = await getReservationById(id);
+//     reservation.return_deadline = getTimeString(reservation.return_deadline)
+//     reservation.pickup_date = getTimeString(reservation.pickup_date)
+//     reservation.reservation_date = getTimeString(reservation.reservation_date)
+//     const location = await getLocationById(reservation.location)
+//     location.location = JSON.stringify(location?.location)
+//     return {
+//         props: {
+//             reservation,
+//             location
+//         }
+//     };
+// }
 
-function getTimeString(date){
+function getTimeString(date) {
     date = date?.seconds ? date?.seconds * 1000 : date
     const dateObject = new Date(date); // assuming seconds is Unix timestamp
-    return dateObject.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return dateObject.toLocaleDateString('pl-PL', {day: '2-digit', month: '2-digit', year: 'numeric'});
 }
 
 export default ReservationPage;
