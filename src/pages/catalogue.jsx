@@ -44,7 +44,7 @@ export default function Catalogue() {
                         <Link key={game.id} href={`/product/${game.id}`}>
                             <div className="my-3 flex h-80 w-full flex-col bg-neutral-100 px-2 shadow">
                                 <div className="flex h-3/4 rounded border mx-2.5 my-2.5">
-                                    <Image src={`/games/${game.name}.jpg`} alt={game.name} width={300} height={100}/>
+                                    <Image src={`games/${game.name}.jpg`} alt={game.name} width={300} height={100}/>
                                 </div>
                                 <div className="h-1/4 text-xl">
                                     {game.name} <br/>
