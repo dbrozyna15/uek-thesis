@@ -37,7 +37,7 @@ function ProductPage() {
                 className="mx-4 mt-8 mb-16 flex w-full flex-col flex-nowrap content-between text-black">
                 <BackButton src="/catalogue"/>
                 <div className="flex w-full justify-center rounded-sm bg-neutral-100 pt-2 pb-6 shadow-lg">
-                    <Image src={`/games/${game.name}.jpg`} width={320} height={100} alt="xdd"/>
+                    <Image src={`/games/${game.name.toLowerCase()}.jpg`} width={320} height={100} alt="xdd"/>
                 </div>
                 <div className="mt-2 flex w-full flex-wrap text-2xl">{game.name}</div>
                 <div>{game.publisher}</div>
