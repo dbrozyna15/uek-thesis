@@ -15,7 +15,7 @@ function ReservationPage() {
     const [alerted, setAlerted] = useState(false);
     const audioRef = useRef(null);
     useEffect(() => {
-        if (id) {
+        if (id && ! reservation) {
             getReservationById(id).then((reservation) => {
                 setReservation(reservation)
                 reservation.return_deadline = getTimeString(reservation.return_deadline)
