@@ -41,9 +41,7 @@ const signInWithGoogle = async () => {
             await addDoc(collection(db, "users"), {
                 uid: user.uid,
                 name: user.displayName,
-                authProvider: "google",
-                email: user.email,
-                avatarUrl: user.photoURL
+                email: user.email
             });
         }
     } catch (err) {
@@ -61,9 +59,7 @@ const registerWithEmailAndPassword = async (email, firstName, lastName, password
     return await addDoc(collection(db, "users"), {
         uid: user.uid,
         name: firstName + " " + lastName,
-        authProvider: "local",
-        email: email,
-        avatarUrl: avatarUrl
+        email: email
     });
 
 };
@@ -77,14 +73,6 @@ const getBoardGamesCollection = async (searchQuery) => {
 };
 const getReservationsCollection = async (uid) => {
     const q = query(collection(db, "reservations"), where("user", "==", uid));
-    return await getDocs(q).then((querySnapshot) => {
-        return querySnapshot.docs
-            .map((doc) => ({...doc.data(), id: doc.id}));
-    })
-
-};
-const getLocationsCollection = async (searchQuery) => {
-    const q = query(collection(db, "locations"), where("address", ">=", searchQuery), where("address", "<=", searchQuery + "\uf8ff"));
     return await getDocs(q).then((querySnapshot) => {
         return querySnapshot.docs
             .map((doc) => ({...doc.data(), id: doc.id}));
@@ -107,13 +95,7 @@ const getReservationById = async (searchQuery) => {
     })
 
 };
-const getLocationById = async (searchQuery) => {
-    const q = doc(db, "locations", searchQuery);
-    return await getDoc(q).then((doc) => {
-        return doc.data()
-    })
 
-};
 const getUserById = async (uid) => {
     const q = query(collection(db, "users"), where("uid", "==", uid));
     return await getDocs(q).then((querySnapshot) => {
@@ -156,9 +138,7 @@ export {
     getBoardGamesCollection,
     getBoardGameById,
     getReservationsCollection,
-    getLocationsCollection,
     getReservationById,
-    getLocationById,
     getUserById,
     addReservation,
     updateGameStatus,

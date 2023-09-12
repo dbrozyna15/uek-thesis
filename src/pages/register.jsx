@@ -2,7 +2,6 @@ import {Jaldi} from 'next/font/google'
 import {registerWithEmailAndPassword} from "@/services/firebase";
 import {useState} from "react";
 import {useRouter} from "next/navigation"
-import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage"
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
@@ -12,25 +11,10 @@ export default function RegisterPage() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [password, setPassword] = useState("");
-    const [avatar, setAvatar] = useState("");
     const [showError, setShowError] = useState('hidden');
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        setAvatar(file);
-    };
     const register = async () => {
         try {
-            // Upload the avatar to Firebase Storage
-            const storage = getStorage()
-            const avatarRef = ref(storage, `avatars/${avatar.name}`);
-            const snapshot = await uploadBytes(avatarRef, avatar);
-
-            // Wait for the upload to complete and get the download URL
-            const downloadURL = await getDownloadURL(snapshot.ref);
-
-            // Do something with the download URL, such as store it in a database
-            console.log(downloadURL);
-            await registerWithEmailAndPassword(email, firstName, lastName, password, downloadURL).then(() => {router.push('/registration-success')})
+            await registerWithEmailAndPassword(email, firstName, lastName, password).then(() => {router.push('/registration-success')})
         } catch (err) {
             setShowError('visible');
         }
@@ -88,15 +72,6 @@ export default function RegisterPage() {
                             className="w-full appearance-none rounded border px-3 py-2 text-xl leading-tight text-black shadow focus:shadow-outline focus:outline-none"
                             id="userPassword" type="password" value={password}
                             onChange={(e) => setPassword(e.target.value)} placeholder="********"/>
-                    </div>
-                    <div className="mb-6">
-                        <label className="mb-2 block text-xl font-bold text-gray-700" htmlFor="avatar">
-                            Avatar
-                        </label>
-                        <input type="file" className="block w-full file:mr-4 file:py-2 file:px-4 file:rounded
-                                                      file:border file:text-sm file:font-semibold file:bg-black 
-                                                      file:text-white hover:file:bg-white hover:file:text-black hover:file:border"
-                                onChange={handleFileChange}/>
                     </div>
                     <div className="flex flex-wrap items-center justify-around">
                         <button

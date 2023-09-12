@@ -1,5 +1,4 @@
 import {useRouter} from 'next/router';
-import {getLocationById, getReservationById} from "@/services/firebase";
 import Image from "next/image";
 import {Jaldi} from 'next/font/google'
 import BackButton from "@/components/back-button";
@@ -11,15 +10,12 @@ function ReservationPage() {
     const router = useRouter();
     const {id, fresh} = router.query;
     const [reservation, setReservation] = useState();
-    const [location, setLocation] = useState();
     const [alerted, setAlerted] = useState(false);
     const audioRef = useRef(null);
     useEffect(() => {
         if (id && ! reservation) {
             getReservationById(id).then((reservation) => {
                 setReservation(reservation)
-                reservation.return_deadline = getTimeString(reservation.return_deadline)
-                reservation.pickup_date = getTimeString(reservation.pickup_date)
                 reservation.reservation_date = getTimeString(reservation.reservation_date)
             })
         }
@@ -34,12 +30,6 @@ function ReservationPage() {
                 audioRef.current.play();
                 console.log('played')
             }, 1000);
-        }
-        if (reservation) {
-            getLocationById(reservation.location).then((location) => {
-                setLocation(location)
-                location.location = JSON.stringify(location?.location)
-            })
         }
     }, [alerted, fresh, id, reservation]);
     if (!reservation || !location) {
@@ -67,16 +57,8 @@ function ReservationPage() {
                 <div className="mt-8 mb-8 text-xl">
                     <div className="mb-2 border-b-2">Status: <span
                         className="float-right">{reservation.status}</span></div>
-                    <div className="mb-2 border-b-2">Pick-up point: <span
-                        className="float-right">{location.address}</span></div>
                     <div className="mb-2 border-b-2">Date of reservation: <span
                         className="float-right">{reservation.reservation_date}</span>
-                    </div>
-                    <div className="mb-2 border-b-2">Date of pick-up: <span
-                        className="float-right">{reservation.pickup_date !== 'Invalid Date' ? reservation.pickup_date : '----'}</span>
-                    </div>
-                    <div className="mb-2 border-b-2">Deadline for return: <span
-                        className="float-right">{(reservation.pickup_date !== 'Invalid Date') && reservation.pickup_date ? reservation.return_deadline : '----'}</span>
                     </div>
                 </div>
             </div>

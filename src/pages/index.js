@@ -36,14 +36,6 @@ export default function Home() {
                         className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Reservations
                     </div>
                 </Link>
-                <Link href="/locations" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
-                    <div className="flex w-2/5 flex-wrap content-center justify-center">
-                        <Image src="/icons/locations.png" width={100} height={100} alt="pickup"></Image>
-                    </div>
-                    <div className="flex w-3/5 flex-wrap content-center justify-center text-center text-3xl">Pick-up
-                        points
-                    </div>
-                </Link>
                 <Link href="/profile" className="my-4 flex h-1/4 w-full rounded border-2 border-black">
                     <div className="flex w-2/5 flex-wrap content-center justify-center">
                         <Image src="/icons/profile.png" width={100} height={100} alt="profile"></Image>

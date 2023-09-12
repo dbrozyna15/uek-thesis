@@ -35,7 +35,7 @@ export default function Reservations() {
                     Profile
                 </div>
                 <div className="flex max-h-40 justify-center">
-                    <Image src={userDetails?.avatarUrl ?? '/icons/profile.png'} alt="avatar-placeholder" width={150} height={100} className="rounded-full"/>
+                    <Image src={'/icons/profile.png'} alt="avatar-placeholder" width={150} height={100} className="rounded-full"/>
                 </div>
                 <div className="mb-4 border-b border-black">
                     <div>Name</div>
