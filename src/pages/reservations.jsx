@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import {useEffect, useState} from 'react'
 import {useAuthState} from 'react-firebase-hooks/auth'
-import {auth, getReservationsCollection} from "@/services/firebase";
+import {auth} from "@/services/firebase";
 import {useRouter} from "next/navigation"
 import NavigationBar from "@/components/navigation-bar";
+import {getReservationsCollection} from "@/services/supabase"
 
 import {Jaldi} from 'next/font/google'
 
@@ -15,7 +16,7 @@ export default function Reservations() {
     const [user] = useAuthState(auth);
     const [reservations, setReservations] = useState([]);
     const fetchReservations = async () => {
-        await getReservationsCollection(user?.uid).then(result => {
+        await getReservationsCollection(user.uid).then(result => {
             setReservations(result)
         });
     }

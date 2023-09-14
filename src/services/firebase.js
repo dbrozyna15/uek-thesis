@@ -7,7 +7,8 @@ import {
     signInWithPopup,
     signOut
 } from "firebase/auth";
-import {addDoc, collection, getDocs, getFirestore, query, where, doc, getDoc, updateDoc} from "firebase/firestore";
+import {collection, getDocs, getFirestore, query, where} from "firebase/firestore";
+import {addUser} from "@/services/supabase";
 
 
 const firebaseConfig = {
@@ -29,8 +30,22 @@ if (!getApps().length) {
 }
 
 const provider = new GoogleAuthProvider();
+
 const auth = getAuth(app);
+
 const db = getFirestore(app);
+
+const registerWithEmailAndPassword = async (email, firstName, lastName, password, avatarUrl) => {
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    await addUser(user.uid, firstName + " " + lastName, email);
+};
+
+const logInWithEmailAndPassword = async (email, password) => {
+    return await signInWithEmailAndPassword(auth, email, password);
+
+};
+
 const signInWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, provider);
@@ -38,109 +53,23 @@ const signInWithGoogle = async () => {
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
         const docs = await getDocs(q);
         if (docs.docs.length === 0) {
-            await addDoc(collection(db, "users"), {
-                uid: user.uid,
-                name: user.displayName,
-                email: user.email
-            });
+            await addUser(user.uid, user.displayName, user.email);
         }
     } catch (err) {
         console.error(err);
         alert(err.message);
     }
-}
-const logInWithEmailAndPassword = async (email, password) => {
-    return await signInWithEmailAndPassword(auth, email, password);
-
 };
-const registerWithEmailAndPassword = async (email, firstName, lastName, password, avatarUrl) => {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
-    const user = res.user;
-    return await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        name: firstName + " " + lastName,
-        email: email
-    });
-
-};
-
-const getBoardGamesCollection = async (searchQuery) => {
-    const q = query(collection(db, "items", 'board_games', 'owned_board_games'), where("name", ">=", searchQuery), where("name", "<=", searchQuery + "\uf8ff"));
-    return await getDocs(q).then((querySnapshot) => {
-        return querySnapshot.docs
-            .map((doc) => ({...doc.data(), id: doc.id}));
-    })
-};
-const getReservationsCollection = async (uid) => {
-    const q = query(collection(db, "reservations"), where("user", "==", uid));
-    return await getDocs(q).then((querySnapshot) => {
-        return querySnapshot.docs
-            .map((doc) => ({...doc.data(), id: doc.id}));
-    })
-
-};
-const getBoardGameById = async (searchQuery) => {
-
-    const q = doc(db, "items", 'board_games', 'owned_board_games', searchQuery);
-    return await getDoc(q).then((doc) => {
-        return doc.data()
-    })
-
-};
-const getReservationById = async (searchQuery) => {
-
-    const q = doc(db, "reservations", searchQuery);
-    return await getDoc(q).then((doc) => {
-        return doc.data()
-    })
-
-};
-
-const getUserById = async (uid) => {
-    const q = query(collection(db, "users"), where("uid", "==", uid));
-    return await getDocs(q).then((querySnapshot) => {
-        return querySnapshot.docs
-            .map((doc) => ({...doc.data(), id: doc.id}))[0];
-    })
-
-};
-
-const addReservation = async (user, game, game_id) => {
-    console.log(user.uid, game, game_id)
-    return await addDoc(collection(db, "reservations"), {
-        user: user.uid,
-        game: game_id,
-        location: game.location,
-        name: game.name,
-        reservation_date: Date.now(),
-        status: 'Reserved'
-    });
-};
-
-const updateGameStatus = async (id, game) => {
-    const q = doc(db, "items", 'board_games', 'owned_board_games', id);
-    await updateDoc(q, {
-        rented: game.rented + 1,
-    })
-
-}
-
 
 const logout = () => {
     signOut(auth);
 };
+
 export {
     auth,
     signInWithGoogle,
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,
     logout,
-    getBoardGamesCollection,
-    getBoardGameById,
-    getReservationsCollection,
-    getReservationById,
-    getUserById,
-    addReservation,
-    updateGameStatus,
     db
 };

@@ -4,7 +4,6 @@ import {useState} from "react";
 import {useRouter} from "next/navigation"
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
-
 export default function RegisterPage() {
     const router = useRouter()
     const [email, setEmail] = useState("");

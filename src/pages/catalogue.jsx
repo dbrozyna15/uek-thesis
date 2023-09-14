@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import {auth} from "@/services/firebase";
 import {useRouter} from "next/navigation"
-import {getBoardGamesCollection} from "@/services/firebase";
+import {getBoardGamesCollection} from "@/services/supabase";
 import NavigationBar from "@/components/navigation-bar";
 
 import {Jaldi} from 'next/font/google'
@@ -44,7 +44,8 @@ export default function Catalogue() {
                         <Link key={game.id} href={`/product/${game.id}`}>
                             <div className="my-3 flex h-80 w-full flex-col bg-neutral-100 px-2 shadow">
                                 <div className="flex h-3/4 rounded border mx-2.5 my-2.5">
-                                    <Image src={`/games/${game.name.toLowerCase()}.jpg`} alt={game.name} width={300} height={100}/>
+                                    <Image src={`/games/${game.name.toLowerCase()}.jpg`} alt={game.name} width={300}
+                                           height={100}/>
                                 </div>
                                 <div className="h-1/4 text-xl">
                                     {game.name} <br/>

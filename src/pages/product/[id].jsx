@@ -1,11 +1,12 @@
 import {useRouter} from 'next/router';
-import {getBoardGameById, addReservation, updateGameStatus, auth} from "@/services/firebase";
+import {auth} from "@/services/firebase";
 import Image from "next/image";
 import {Jaldi} from 'next/font/google'
 import BackButton from "@/components/back-button";
 import TagsArray from "@/components/tags-array";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useEffect, useState} from "react";
+import {getBoardGameById, addReservation, updateBoardGameRented} from "@/services/supabase";
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
@@ -18,13 +19,14 @@ function ProductPage() {
         if (id) {
             getBoardGameById(id).then((game) => setGame(game));
         }
+
     }, [id]);
-    
+
     const makeReservation = async () => {
         if (!available) return;
-        const reservation = await addReservation(user, game, id);
-        await updateGameStatus(id, game);
-        router.push(`/reservations/${reservation.id}?fresh=true`)
+        const reservation = await addReservation(user.uid, game.id);
+        await updateBoardGameRented(game);
+        router.push(`/reservations/${reservation.id}`)
     }
     if (!game) {
         return <div>Loading...</div>;
@@ -42,19 +44,25 @@ function ProductPage() {
                 <div className="mt-2 flex w-full flex-wrap text-2xl">{game.name}</div>
                 <div>{game.publisher}</div>
                 <div className="mt-8 mb-12 text-2xl">
-                    <div className="mb-2 border-b-2">Average time: <span className="float-right">{game.details.average_time} mins</span></div>
+                    <div className="mb-2 border-b-2">Average time: <span
+                        className="float-right">{game.average_time} mins</span></div>
                     <div className="mb-2 border-b-2">Players: <span
-                        className="float-right">{game.details.min_players}-{game.details.max_players}</span></div>
-                    <div className="mb-2 border-b-2">Tags: <span className="float-right"> <TagsArray tags={game.tags}/> </span></div>
-                    <div className="mb-2 border-b-2">Available: <span className="float-right"> {available ? 'YES' : 'NO'} </span></div>
+                        className="float-right">{game.min_players}-{game.max_players}</span></div>
+                    <div className="mb-2 border-b-2">Tags: <span className="float-right"> <TagsArray tags={game.tags}/> </span>
+                    </div>
+                    <div className="mb-2 border-b-2">Available: <span
+                        className="float-right"> {available ? 'YES' : 'NO'} </span></div>
                 </div>
-                { available ?
+                {available ?
                     <div className="mb-16 flex justify-center">
-                        <button className="h-12 w-11/12 rounded-2xl bg-black text-2xl text-white" onClick={makeReservation}>RESERVE</button>
+                        <button className="h-12 w-11/12 rounded-2xl bg-black text-2xl text-white"
+                                onClick={makeReservation}>RESERVE
+                        </button>
                     </div>
                     :
                     <div className="mb-4 flex justify-center">
-                        <button className="h-12 w-11/12 rounded-2xl bg-neutral-400 text-2xl text-white">NOT AVAILABLE</button>
+                        <button className="h-12 w-11/12 rounded-2xl bg-neutral-400 text-2xl text-white">NOT AVAILABLE
+                        </button>
                     </div>
                 }
             </div>

@@ -1,9 +1,10 @@
 import Image from "next/image";
 import {useEffect, useRef, useState} from 'react'
 import {useAuthState} from 'react-firebase-hooks/auth'
-import {auth, getUserById} from "@/services/firebase";
+import {auth} from "@/services/firebase";
 import {useRouter} from "next/navigation"
 import NavigationBar from "@/components/navigation-bar";
+import {getUserById} from "@/services/supabase";
 
 import {Jaldi} from 'next/font/google'
 import LogoutButton from "@/components/logout-button";

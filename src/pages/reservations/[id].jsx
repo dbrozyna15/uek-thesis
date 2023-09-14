@@ -3,6 +3,7 @@ import Image from "next/image";
 import {Jaldi} from 'next/font/google'
 import BackButton from "@/components/back-button";
 import {useEffect, useRef, useState} from "react";
+import {getBoardGameById, getReservationById} from "@/services/supabase";
 
 const jaldi = Jaldi({weight: '400', subsets: ['latin']});
 
@@ -10,6 +11,7 @@ function ReservationPage() {
     const router = useRouter();
     const {id, fresh} = router.query;
     const [reservation, setReservation] = useState();
+    const [gameName, setGameName] = useState('loading...');
     const [alerted, setAlerted] = useState(false);
     const audioRef = useRef(null);
     useEffect(() => {
@@ -17,7 +19,9 @@ function ReservationPage() {
             getReservationById(id).then((reservation) => {
                 setReservation(reservation)
                 reservation.reservation_date = getTimeString(reservation.reservation_date)
+                getBoardGameById(reservation.game_id).then((game) => setGameName(game.name))
             })
+            
         }
         
         if (fresh && ! alerted && audioRef) {
@@ -32,7 +36,7 @@ function ReservationPage() {
             }, 1000);
         }
     }, [alerted, fresh, id, reservation]);
-    if (!reservation || !location) {
+    if (!reservation || !location || !gameName) {
         return <div>Loading...</div>;
     }
     return (
@@ -49,10 +53,10 @@ function ReservationPage() {
                     <div className="text-2xl">{id}</div>
                 </div>
                 <div className="flex w-full justify-center rounded-sm bg-neutral-100 pt-2 pb-6 shadow-lg">
-                    <Image src={`/games/${reservation.name.toLowerCase()}.jpg`} width={200} height={100} alt="xdd"/>
+                    <Image src={`/games/${gameName.toLowerCase()}.jpg`} width={200} height={100} alt="xdd"/>
                 </div>
                 <div className="mt-2 flex w-full flex-wrap text-3xl">
-                    {reservation.name}
+                    {gameName}
                 </div>
                 <div className="mt-8 mb-8 text-xl">
                     <div className="mb-2 border-b-2">Status: <span
