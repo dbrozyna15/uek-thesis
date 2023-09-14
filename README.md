@@ -2,4 +2,4 @@
 
 ## Autor: Dominik Brożyna
 
-Kod źródłowy gragmentów kodu zawartych w pracy licencjackiej.
+Kod źródłowy aplikacji zawartej w pracy licencjackiej.
